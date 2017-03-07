@@ -1,0 +1,25 @@
+BUTTONS
+=======
+
+1) LABEL: "Draw Points"
+
+2) LABEL: "Draw Line"
+
+3) LABEL: "Draw Filled Circle"
+
+4) LABEL: "Close Window" (if selected, "Open Window")
+
+
+FIELDS CONNECTED TO EACH BUTTON
+====================================
+
+1) DIV: x coord (slider), y coord(slider), color picker
+ add new
+
+2)
+
+
+- array of 4 buttons
+	1st - Draw points with specified color
+	2nd - Draw a line with specified end-points and color
+	3rd - Draw a filled circle with specified center, radius, color

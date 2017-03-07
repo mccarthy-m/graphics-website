@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+
+<html ng-app="simpleGraphicsApp">
+
+	<head>
+		<title>Graphics Assign 1</title>
+
+		<!--Bootstrap CSS CDN-->
+		<link 
+			rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+			crossorigin="anonymous">
+
+		<link 
+			el="stylesheet"
+			type="text/css" 
+			href=tutorial.css>
+		
+	</head>
+
+	<body ng-controller="MainCtrl as ctrl">
+
+		<div class="container-fluid">
+
+			<!-- Left side of screen - graphics window -->
+			<div class="col-xs-6" id="graphics-window"></div>
+
+
+			<!-- Right side of screen - drawing options -->
+			<div class="col-xs-6">
+
+				<!-- Option Buttons-->
+				<div class="row">
+					<div
+						class="col-xs-3"
+						ng-repeat="option in ctrl.drawingOptionButtonArray">
+						<button
+							ng-bind="option.label"
+							ng-click="ctrl.selectDrawingOptionButton(option.label)"></button>
+					</div>
+				</div>
+
+				<!-- Point specifications -->
+				<div 
+					class="row"
+					ng-show="ctrl.drawingOptionButtonArray[0].selected === true">
+
+					<!-- Choose x value -->
+					<div class="col-xs-3">
+						<div class="row">
+							<input
+								type="range"
+								min="0"
+								max="100"
+								ng-model="ctrl.pointX"
+								ng-change="ctrl.setPointX()">
+							<span ng-bind="ctrl.pointX"></span>
+						</div>
+
+						<div class="row">
+							<input
+								type="range"
+								min="0"
+								max="100"
+								ng-model="ctrl.pointY"
+								ng-change="ctrl.setPointY()">
+							<span ng-bind="ctrl.pointY"></span>
+						</div>
+					</div>
+
+					<!-- Choose y value -->
+					<div class="col-xs-3">
+						<input 
+							type="range"
+							min="10"
+							max="100"
+							ng-model="ctrl.pointSize"
+							ng-change="ctrl.setPointSize()">
+						<span ng-bind="ctrl.pointSize"></span>
+					</div>
+
+
+					<!-- Color Picker -->
+					<div class="col-xs-3">
+
+						<!-- Color selector button -->
+						<div class="row">
+							<div class="col-xs-12">
+								<button
+									class="jscolor
+									{
+										valueElement: 'pointValueInput',
+										styleElement: 'pointStyleInput'
+									}"
+									id="pointStyleInput"
+
+								>
+									Choose Color
+								</button> 
+							</div>
+						</div>
+
+						<!-- View Color -->
+						<div class="row">
+							<div class="col-xs-12">
+								<input 
+									id="pointValueInput"
+									ng-model="ctrl.pointColor"
+									ng-change="ctrl.setPointColor()"
+								>
+							</div>
+						</div>
+
+					</div>
+
+					<!-- "Add new point" button -->
+					<div class="col-xs-3">
+						<button
+							ng-click="createNewPointDiv()">+</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- line specifications -->
+			<div 
+					class="row"
+					ng-show="ctrl.drawingOptionButtonArray[1].selected === true">
+
+					<!-- Choose x value -->
+					<div class="col-xs-3">
+						<div class="row">
+							<input
+							type="range"
+							min="0"
+							max="100"
+							ng-model="ctrl.lineX1"
+							ng-change="ctrl.setLineX1()">
+						<input
+							type="range"
+							min="0"
+							max="100"
+							ng-model="ctrl.lineX2"
+							ng-change="ctrl.setLineX2()">
+						</div>
+
+						<div class="row">
+							<input
+							type="range"
+							min="0"
+							max="100"
+							ng-model="ctrl.lineY1"
+							ng-change="ctrl.setLineY1()">
+						<input
+							type="range"
+							min="0"
+							max="100"
+							ng-model="ctrl.lineY2"
+							ng-change="ctrl.setLineY2()">
+						</div>
+					</div>
+
+					<!-- Choose y value -->
+					<div class="col-xs-3">
+						<div class="row">
+							<input
+								type="range"
+								min="0"
+								max="100"
+								ng-model="ctrl.lineYTranslation"
+								ng-change="ctrl.setLineYTranslation()">
+							<input
+								type="range"
+								min="0"
+								max="100"
+								ng-model="ctrl.lineXTranslation"
+								ng-change="ctrl.setLineXTranslation()">
+							<
+							<input
+								type="range"
+								min="0"
+								max="200"
+								ng-model="ctrl.lineRotationVal"
+								ng-change="ctrl.createLine()">
+							<
+						</div>
+					</div>
+
+
+					<!-- Color Picker -->
+					<div class="col-xs-3">
+
+						<!-- Color selector button -->
+						<div class="row">
+							<div class="col-xs-12">
+								<button
+									class="jscolor
+									{
+										valueElement: 'lineValueInput',
+										styleElement: 'lineStyleInput'
+									}"
+									id="lineStyleInput"
+									>
+									Choose Color
+								</button> 
+							</div>
+						</div>
+
+						<!-- View Color -->
+						<div class="row">
+							<div class="col-xs-12">
+								<input
+									id="lineValueInput"
+									ng-model="ctrl.lineColor"
+									ng-change="ctrl.setLineColor()"
+								>
+							</div>
+						</div>
+
+					</div>
+
+					<!-- "Add new point" button -->
+					<div class="col-xs-3">
+						<button>+</button>
+					</div>
+				</div>
+
+			<!-- Circle Specifications -->
+				<div 
+					class="row"
+					ng-show="ctrl.drawingOptionButtonArray[2].selected === true">
+
+					<!-- Choose x value -->
+					<div class="col-xs-3">
+						<input
+							type="range"
+							min="0"
+							max="100"
+							ng-model="ctrl.xCircleVal"
+							ng-change="ctrl.createCircle()">
+						<input
+							type="range"
+							min="0"
+							max="100"
+							ng-model="ctrl.yCircleVal"
+							ng-change="ctrl.createCircle()">
+					</div>
+
+					<!-- Choose y value -->
+					<div class="col-xs-3">
+						<input
+							type="range"
+							min="0"
+							max="100"
+							ng-model="ctrl.radius"
+							ng-change="ctrl.createCircle()">
+					</div>
+
+
+					<!-- Color Picker -->
+					<div class="col-xs-3">
+
+						<!-- Color selector button -->
+						<div class="row">
+							<div class="col-xs-12">
+								<button
+									class="jscolor
+									{
+										valueElement: 'circleValueInput', 
+										styleElement: 'circleStyleInput'
+									}"
+									id="circleStyleInput"
+									>
+									Choose Color
+								</button> 
+							</div>
+						</div>
+
+						<!-- View Color -->
+						<div class="row">
+							<div class="col-xs-12">
+								<input 
+									id="circleValueInput"
+									ng-model="ctrl.circleColor"
+									ng-change="ctrl.createCircle()"
+								>
+							</div>
+						</div>
+
+					</div>
+
+					<!-- "Add new point" button -->
+					<div class="col-xs-3">
+						<button>+</button>
+					</div>
+				</div>
+
+				<!-- Clear button specification -->
+
+
+
+	 		<!-- INCLUDE FILES -->
+	 		<!-- ========================================================================== -->
+
+	 		<!-- jscolor JavaScript file -->
+	 		<script
+	 			type="text/javascript"
+	 			src="jscolor.js">
+	 		</script>
+
+	 		<!-- jQuery CDN -->
+	 		<script
+	  			src="https://code.jquery.com/jquery-3.1.1.min.js"
+	  			integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+	  			crossorigin="anonymous">
+	  		</script>
+
+			<!-- Bootstrap JavaScript CDN -->
+			<script 
+				src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+			</script>
+
+			<!-- AngularJS CDN -->
+			<script
+				src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js">
+			</script>
+
+	  		<!-- three.js file -->
+	  		<script 
+	  			type="text/javascript"
+	  			src="three.js">
+	  		</script>
+
+
+	  		<!-- Constants Factory -->
+	  		<script
+	  			type="text/javascript"
+	  			src="js/constants.js">
+	  		</script>
+
+
+
+	  		<!-- Line Vertices Factory
+	  			 DEPENDENCIES:
+	  			 	- constants.js
+	  		-->
+	  		<script
+	  			type="text/javascript"
+	  			src="js/lineVertices.js">
+	  		</script>
+
+	  		<!-- Line Material Factory
+	  			 - DEPENDENCIES:
+	  			 	- constants.js  -->
+	  		<script
+	  			type="text/javascript"
+	  			src="js/lineMaterial.js">
+	  		</script>
+
+
+
+	  		<!-- Line Geometry Factory
+	  			 DEPENDENCIES:
+	  			 	- lineVertices.js
+	  		 -->
+	  		<script
+	  			type="text/javascript"
+	  			src="js/lineGeometry.js">
+	  		</script>
+
+
+
+
+	  		<script
+	  			type="text/javascript"
+	  			src="js/line.js">
+	  		</script>
+
+	  		<script
+	  			type="text/javascript"
+	  			src="js/pointLight.js">
+	  		</script>
+
+	  		<script
+	  			type="text/javascript"
+	  			src="js/orthographicCamera.js">
+	  		</script>
+
+	  		<script
+	  			type="text/javascript"
+	  			src="js/pointVertex.js">
+	  		</script>
+
+	  		<script
+	  			type="text/javascript"
+	  			src="js/pointGeometry.js">
+	  		</script>
+
+	  		<script
+	  			type="text/javascript"
+	  			src="js/pointMaterial.js">
+	  		</script>
+
+	  		<script
+	  			type="text/javascript"
+	  			src="js/point.js">
+	  		</script>
+
+	  		<script
+	  			type="text/javascript"
+	  			src="js/scene.js">
+	  		</script>
+
+	  		<script
+	  			type="text/javascript"
+	  			src="js/renderer.js">
+	  		</script>
+
+	  		<script
+	  			type="text/javascript"
+	  			src="js/mainCtrl.js">
+	  		</script>
+
+  	</div>
+
+	</body>
+
+</html>
